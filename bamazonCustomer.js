@@ -12,11 +12,11 @@ var connection = mysql.createConnection({
     password: "root",
     database: "bamazonDB"
 });
-// forms mysql server connection and database
+// forms mysql server colsnnection and database
 connection.connect(function(err){
     if (err) throw err;
     console.log("Thank you for chosing Bamazon!")
-   productSearch()
+    showItems()
 
 });
 
@@ -24,18 +24,20 @@ connection.connect(function(err){
 var showItems = function(){
     let query = "Select * FROM products";
     connection.query(query, function(err, res){
+       
         if (err) throw err;
         let showItemsTable = new Table({
             head: ["Item ID", "Product Name", "Department Name", "Price", "Quantity" ],
             colWidths: [10, 25, 20, 10, 10]
         });
-        // for (let i=0; i < res.length; i++){
+        for (let i=0; i < res.length; i++){
             showItemsTable.push(
-                [res[0].item_id, res[0].product_name, res[0].department_name, res[0].price, res[0].stock_quantity]
+                [res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]
             );
-        // }
+         }
         console.log("****************************************")
         console.log(showItemsTable.toString())
+        productSearch()
           
         
     });
@@ -43,6 +45,7 @@ var showItems = function(){
 
 // Determine the items the customer wants to buy
 function productSearch(){
+   
     inquirer
     .prompt([{
         name: "ID",
